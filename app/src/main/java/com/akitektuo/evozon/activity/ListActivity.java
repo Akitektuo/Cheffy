@@ -1,4 +1,4 @@
-package com.akitektuo.evozon;
+package com.akitektuo.evozon.activity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.akitektuo.evozon.Adapter.RecipeAdapter;
-import com.akitektuo.evozon.Adapter.RecipeItem;
+import com.akitektuo.evozon.R;
+import com.akitektuo.evozon.adapter.RecipeAdapter;
+import com.akitektuo.evozon.adapter.RecipeItem;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

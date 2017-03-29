@@ -1,6 +1,8 @@
-package com.akitektuo.evozon.Adapter;
+package com.akitektuo.evozon.adapter;
 
 import android.graphics.Bitmap;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by AoD Akitektuo on 29-Mar-17.
@@ -12,6 +14,7 @@ public class RecipeItem {
     private String name;
 
     public RecipeItem(Bitmap image, String recipeName) {
+        image.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
         setBitmap(image);
         setName(recipeName);
     }
