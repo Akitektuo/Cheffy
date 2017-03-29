@@ -9,16 +9,38 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:elevation="4dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:elevation="4dp">
 
+        <AutoCompleteTextView
+            android:id="@+id/edit_auto_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="40dp"
+            android:layout_toStartOf="@+id/button_search"
+            android:gravity="center"
+            android:hint="Search"
+            android:textColor="@color/white" />
 
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/search" />
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Soon a cooking app!" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:padding="16dp"
+        android:scrollbars="none" />
 
 </LinearLayout>
