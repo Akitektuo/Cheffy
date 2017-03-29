@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.akitektuo.evozon">
+    package="com.akitektuo.cheffy">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ListActivity">
+        <activity android:name="com.akitektuo.cheffy.activity.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

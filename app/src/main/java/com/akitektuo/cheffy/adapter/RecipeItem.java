@@ -1,4 +1,4 @@
-package com.akitektuo.evozon.adapter;
+package com.akitektuo.cheffy.adapter;
 
 import android.graphics.Bitmap;
 

@@ -1,4 +1,4 @@
-package com.akitektuo.evozon.adapter;
+package com.akitektuo.cheffy.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.akitektuo.evozon.R;
+import com.akitektuo.cheffy.R;
 
 import java.util.List;
 
