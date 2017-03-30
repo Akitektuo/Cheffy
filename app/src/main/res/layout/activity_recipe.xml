@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
+                android:layout_marginBottom="0dp"
                 android:gravity="center">
 
                 <ImageView
@@ -50,7 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:clipToPadding="false"
-                android:padding="16dp"
+                android:divider="@android:color/transparent"
+                android:nestedScrollingEnabled="true"
                 android:scrollbars="none" />
 
             <TextView
@@ -58,7 +60,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="@string/test" />
+                android:layout_marginTop="0dp"
+                android:text="@string/test"
+                android:textSize="15sp" />
 
 
         </LinearLayout>
