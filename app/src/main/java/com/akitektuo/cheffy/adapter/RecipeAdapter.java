@@ -1,16 +1,21 @@
 package com.akitektuo.cheffy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.akitektuo.cheffy.R;
+import com.akitektuo.cheffy.activity.RecipeActivity;
 
 import java.util.List;
+
+import static com.akitektuo.cheffy.util.Constant.KEY_NAME;
 
 /**
  * Created by AoD Akitektuo on 29-Mar-17.
@@ -37,9 +42,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(RecipeAdapter.ViewHolder viewHolder, int position) {
-        RecipeItem item = items.get(position);
+        final RecipeItem item = items.get(position);
         viewHolder.image.setImageBitmap(item.getBitmap());
         viewHolder.text.setText(item.getName());
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, RecipeActivity.class);
+                intent.putExtra(KEY_NAME, item.getName());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -48,11 +61,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout layout;
         ImageView image;
         TextView text;
 
         ViewHolder(View view) {
             super(view);
+            layout = (RelativeLayout) view.findViewById(R.id.layout_item_parent);
             image = (ImageView) view.findViewById(R.id.image_item_recipe);
             text = (TextView) view.findViewById(R.id.text_item_name);
         }
