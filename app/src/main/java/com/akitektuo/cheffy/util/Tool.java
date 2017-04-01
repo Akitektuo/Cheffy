@@ -1,10 +1,14 @@
 package com.akitektuo.cheffy.util;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -47,5 +51,11 @@ public class Tool {
 
     public static ArrayList<String> convertStringToList(String str) {
         return new ArrayList<>(Arrays.asList(str.split(LIST_SEPARATOR)));
+    }
+
+    public static Bitmap getBitmapForName(Context context, String image) {
+        Bitmap resizedBitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources().getIdentifier(image, "drawable", context.getPackageName()));
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
+        return resizedBitmap;
     }
 }
