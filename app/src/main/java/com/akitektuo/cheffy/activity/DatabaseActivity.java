@@ -39,7 +39,7 @@ public class DatabaseActivity extends Activity {
             public void onClick(View view) {
                 database.addRecipe(database.getRecipeId() + 1, editName.getText().toString(),
                         editDescription.getText().toString(), editIngredients.getText().toString(),
-                        editQuantity.getText().toString(), Integer.parseInt(editDuration.getText().toString()),
+                        editQuantity.getText().toString(), Long.parseLong(editDuration.getText().toString()),
                         editPicture.getText().toString());
                 editName.setText("");
                 editDescription.setText("");

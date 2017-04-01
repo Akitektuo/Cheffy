@@ -50,6 +50,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             public void onClick(View view) {
                 Intent intent = new Intent(context, RecipeActivity.class);
                 intent.putExtra(KEY_NAME, item.getName());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

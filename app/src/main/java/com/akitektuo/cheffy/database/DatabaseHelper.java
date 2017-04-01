@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.RecipeContractEntry.COLUMN_DESCRIPTION + " TEXT," +
             DatabaseContract.RecipeContractEntry.COLUMN_INGREDIENT + " TEXT," +
             DatabaseContract.RecipeContractEntry.COLUMN_QUANTITY + " TEXT," +
-            DatabaseContract.RecipeContractEntry.COLUMN_DURATION + " NUMBER," +
+            DatabaseContract.RecipeContractEntry.COLUMN_DURATION + " INTEGER," +
             DatabaseContract.RecipeContractEntry.COLUMN_PICTURE + " TEXT" + ");";
 
     public DatabaseHelper(Context context) {
@@ -39,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addRecipe(int id, String name, String description, String ingredient, String quantity, int duration, String picture) {
+    public void addRecipe(int id, String name, String description, String ingredient, String quantity, long duration, String picture) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseContract.RecipeContractEntry.COLUMN_ID, id);
         contentValues.put(DatabaseContract.RecipeContractEntry.COLUMN_NAME, name);
@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(DatabaseContract.RecipeContractEntry.TABLE_NAME, null, contentValues);
     }
 
-    private Cursor getRecipe() {
+    public Cursor getRecipe() {
         String[] list = {DatabaseContract.RecipeContractEntry.COLUMN_ID,
                 DatabaseContract.RecipeContractEntry.COLUMN_NAME,
                 DatabaseContract.RecipeContractEntry.COLUMN_DESCRIPTION,
@@ -81,6 +81,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             id = cursor.getInt(0);
         }
         return id;
+    }
+
+    public Cursor getRecipeForName(String name) {
+        String[] results = {DatabaseContract.RecipeContractEntry.COLUMN_ID,
+                DatabaseContract.RecipeContractEntry.COLUMN_NAME,
+                DatabaseContract.RecipeContractEntry.COLUMN_DESCRIPTION,
+                DatabaseContract.RecipeContractEntry.COLUMN_INGREDIENT,
+                DatabaseContract.RecipeContractEntry.COLUMN_QUANTITY,
+                DatabaseContract.RecipeContractEntry.COLUMN_DURATION,
+                DatabaseContract.RecipeContractEntry.COLUMN_PICTURE};
+        String selection = DatabaseContract.RecipeContractEntry.COLUMN_NAME + " LIKE ?";
+        String[] selectionArgs = {name};
+        return getReadableDatabase().query(DatabaseContract.RecipeContractEntry.TABLE_NAME, results, selection, selectionArgs, null, null, null);
     }
 
 }
