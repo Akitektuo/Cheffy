@@ -64,6 +64,7 @@ public class ListActivity extends Activity {
                 startActivity(new Intent(getApplicationContext(), DatabaseActivity.class));
             }
         });
+        recipeItems = new ArrayList<>();
         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
         mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
@@ -76,24 +77,25 @@ public class ListActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        ArrayList<RecipeItem> recipeItems = new ArrayList<>();
         Cursor cursorItems = database.getRecipeAlphabetically();
         if (cursorItems.moveToFirst()) {
             do {
+                recipeItems.clear();
                 recipeItems.add(new RecipeItem(getBitmapForName(this, cursorItems.getString(CURSOR_PICTURE)), cursorItems.getString(CURSOR_RECIPE)));
             } while (cursorItems.moveToNext());
         }
         cursorItems.close();
-        list.setAdapter(new RecipeAdapter(this, recipeItems));
-        ArrayList<String> recipes = new ArrayList<>();
+        recipeAdapter = new RecipeAdapter(this, recipeItems);
+        list.setAdapter(recipeAdapter);
+        ArrayList<String> recipesNames = new ArrayList<>();
         Cursor cursorRecipes = database.getRecipe();
         if (cursorRecipes.moveToFirst()) {
             do {
-                recipes.add(cursorRecipes.getString(CURSOR_RECIPE));
+                recipesNames.add(cursorRecipes.getString(CURSOR_RECIPE));
             } while (cursorRecipes.moveToNext());
         }
         cursorRecipes.close();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, recipes);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, recipesNames);
         autoEditSearch.setAdapter(adapter);
         findViewById(R.id.button_search).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,9 +103,10 @@ public class ListActivity extends Activity {
                 if (!autoEditSearch.getText().toString().isEmpty()) {
                     Cursor cursorSearch = database.getRecipeForName(autoEditSearch.getText().toString());
                     if (cursorSearch.moveToFirst()) {
-                        ArrayList<RecipeItem> recipeSearch = new ArrayList<>();
-                        recipeSearch.add(new RecipeItem(getBitmapForName(getApplicationContext(), cursorSearch.getString(CURSOR_PICTURE)), cursorSearch.getString(CURSOR_RECIPE)));
-                        list.setAdapter(new RecipeAdapter(getApplicationContext(), recipeSearch));
+                        recipeItems.clear();
+                        recipeItems.add(new RecipeItem(getBitmapForName(getApplicationContext(), cursorSearch.getString(CURSOR_PICTURE)), cursorSearch.getString(CURSOR_RECIPE)));
+                        recipeAdapter = new RecipeAdapter(getApplicationContext(), recipeItems);
+                        list.setAdapter(recipeAdapter);
                     }
                     cursorSearch.close();
                 } else {
@@ -122,7 +125,7 @@ public class ListActivity extends Activity {
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 HttpHeaders headers = new HttpHeaders();
-                HttpEntity<Object> entity = new HttpEntity<Object>(headers);
+                HttpEntity<Object> entity = new HttpEntity<>(headers);
                 ResponseEntity<Recipe[]> out = restTemplate.exchange(url, HttpMethod.GET, entity, Recipe[].class);
                 if(out.getStatusCode()== HttpStatus.OK){
                     Recipe[] recipes = out.getBody();
