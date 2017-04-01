@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -93,8 +92,8 @@ public class ListActivity extends Activity {
     private void refreshList() {
         Cursor cursorItems = database.getRecipeAlphabetically();
         if (cursorItems.moveToFirst()) {
+            recipeItems.clear();
             do {
-                recipeItems.clear();
                 recipeItems.add(new RecipeItem(getBitmapForName(this, cursorItems.getString(CURSOR_PICTURE)), cursorItems.getString(CURSOR_RECIPE)));
             } while (cursorItems.moveToNext());
         }
