@@ -19,8 +19,14 @@
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:background="@drawable/data_config" />
-
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
         <AutoCompleteTextView
+
             android:id="@+id/edit_auto_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,14 +47,18 @@
             android:background="@drawable/search" />
 
     </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_recipes"
+    <com.yalantis.pulltomakesoup.PullToRefreshView
+        android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:divider="@android:color/transparent"
-        android:padding="16dp"
-        android:scrollbars="none" />
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_recipes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:padding="16dp"
+            android:scrollbars="none" />
+    </com.yalantis.pulltomakesoup.PullToRefreshView>
 </LinearLayout>
