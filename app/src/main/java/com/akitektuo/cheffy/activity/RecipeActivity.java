@@ -56,6 +56,7 @@ public class RecipeActivity extends Activity {
         ListView listIngredients = (ListView) findViewById(R.id.list_ingredients);
         TextView textDescription = (TextView) findViewById(R.id.text_recipe);
         TextView textDuration = (TextView) findViewById(R.id.text_time);
+        ArrayList<IngredientItem> ingredientItems = new ArrayList<>();
         database = new DatabaseHelper(this);
         Cursor cursor = database.getRecipeForName(getIntent().getStringExtra(KEY_NAME));
         if (cursor.moveToFirst()) {
@@ -63,16 +64,20 @@ public class RecipeActivity extends Activity {
             textDescription.setText(cursor.getString(CURSOR_DESCRIPTION));
             ArrayList<String> ingredients = convertStringToList(cursor.getString(CURSOR_INGREDIENT));
             ArrayList<String> quantities = convertStringToList(cursor.getString(CURSOR_QUANTITY));
-            ArrayList<IngredientItem> ingredientItems = new ArrayList<>();
             for (int i = 0; i < ingredients.size(); i++) {
                 ingredientItems.add(new IngredientItem(ingredients.get(i), quantities.get(i)));
             }
-            listIngredients.setAdapter(new IngredientAdapter(this, ingredientItems));
-            if (!setListViewHeightBasedOnItems(listIngredients)) {
-                finish();
-            }
+
             textDuration.setText(convertMillisToTime(cursor.getLong(CURSOR_DURATION)));
             imageFood.setImageBitmap(getBitmapForName(this, cursor.getString(CURSOR_PICTURE)));
+        } else {
+            for (int i = 0; i < 11; i++) {
+                ingredientItems.add(new IngredientItem("ingredient_" + i, ((i + 1) * 50) + " g"));
+            }
+        }
+        listIngredients.setAdapter(new IngredientAdapter(this, ingredientItems));
+        if (!setListViewHeightBasedOnItems(listIngredients)) {
+            finish();
         }
     }
 
