@@ -83,7 +83,7 @@
             android:shadowColor="@color/black"
             android:text="Testing"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <Button
