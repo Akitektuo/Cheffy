@@ -66,7 +66,6 @@ public class RecipeActivity extends Activity {
             ArrayList<IngredientItem> ingredientItems = new ArrayList<>();
             for (int i = 0; i < ingredients.size(); i++) {
                 ingredientItems.add(new IngredientItem(ingredients.get(i), quantities.get(i)));
-                System.out.println(ingredientItems.get(i).getIngredient() + " " + ingredientItems.get(i).getQuantity());
             }
             listIngredients.setAdapter(new IngredientAdapter(this, ingredientItems));
             if (!setListViewHeightBasedOnItems(listIngredients)) {
