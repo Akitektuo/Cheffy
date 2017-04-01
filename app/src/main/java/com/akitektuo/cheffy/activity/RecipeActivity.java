@@ -33,15 +33,19 @@ import static com.akitektuo.cheffy.util.Tool.setListViewHeightBasedOnItems;
 
 public class RecipeActivity extends Activity {
 
-    private RelativeLayout layoutTitle;
+    private TextView textTitle;
+    private TextView textDescription;
     private ImageView imageFood;
+    private TextView textDuration;
+    private ListView listIngredients;
+    private ArrayList<IngredientItem> ingredientItems;
     private DatabaseHelper database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        layoutTitle = (RelativeLayout) findViewById(R.id.layout_title);
+        RelativeLayout layoutTitle = (RelativeLayout) findViewById(R.id.layout_title);
         Bitmap resizedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.shade);
         resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, new ByteArrayOutputStream());
         layoutTitle.setBackground(new BitmapDrawable(resizedBitmap));
@@ -51,13 +55,17 @@ public class RecipeActivity extends Activity {
                 finish();
             }
         });
-        TextView textTitle = (TextView) findViewById(R.id.text_title);
+        textTitle = (TextView) findViewById(R.id.text_title);
         imageFood = (ImageView) findViewById(R.id.image_food);
-        ListView listIngredients = (ListView) findViewById(R.id.list_ingredients);
-        TextView textDescription = (TextView) findViewById(R.id.text_recipe);
-        TextView textDuration = (TextView) findViewById(R.id.text_time);
-        ArrayList<IngredientItem> ingredientItems = new ArrayList<>();
+        listIngredients = (ListView) findViewById(R.id.list_ingredients);
+        textDescription = (TextView) findViewById(R.id.text_recipe);
+        textDuration = (TextView) findViewById(R.id.text_time);
+        ingredientItems = new ArrayList<>();
         database = new DatabaseHelper(this);
+        setInformation();
+    }
+
+    private void setInformation() {
         Cursor cursor = database.getRecipeForName(getIntent().getStringExtra(KEY_NAME));
         if (cursor.moveToFirst()) {
             textTitle.setText(cursor.getString(CURSOR_RECIPE));
@@ -67,9 +75,9 @@ public class RecipeActivity extends Activity {
             for (int i = 0; i < ingredients.size(); i++) {
                 ingredientItems.add(new IngredientItem(ingredients.get(i), quantities.get(i)));
             }
-
             textDuration.setText(convertMillisToTime(cursor.getLong(CURSOR_DURATION)));
             imageFood.setImageBitmap(getBitmapForName(this, cursor.getString(CURSOR_PICTURE)));
+            cursor.close();
         } else {
             for (int i = 0; i < 11; i++) {
                 ingredientItems.add(new IngredientItem("ingredient_" + i, ((i + 1) * 50) + " g"));
