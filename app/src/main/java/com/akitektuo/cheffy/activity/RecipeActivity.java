@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import static com.akitektuo.cheffy.util.Constant.KEY_NAME;
-import static com.akitektuo.cheffy.util.Constant.setListViewHeightBasedOnItems;
+import static com.akitektuo.cheffy.util.Tool.setListViewHeightBasedOnItems;
 
 public class RecipeActivity extends Activity {
 

@@ -12,12 +12,20 @@
         android:background="@color/colorPrimary"
         android:elevation="4dp">
 
+        <Button
+            android:id="@+id/button_database"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/data_config" />
+
         <AutoCompleteTextView
             android:id="@+id/edit_auto_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginStart="40dp"
+            android:layout_toEndOf="@+id/button_database"
             android:layout_toStartOf="@+id/button_search"
             android:gravity="center"
             android:hint="Search"

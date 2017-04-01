@@ -1,11 +1,13 @@
 package com.akitektuo.cheffy.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.akitektuo.cheffy.R;
 import com.akitektuo.cheffy.adapter.RecipeAdapter;
@@ -29,5 +31,11 @@ public class ListActivity extends Activity {
         }
         list.setAdapter(new RecipeAdapter(this, recipeItems));
         list.setLayoutManager(new LinearLayoutManager(this));
+        findViewById(R.id.button_database).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DatabaseActivity.class));
+            }
+        });
     }
 }
