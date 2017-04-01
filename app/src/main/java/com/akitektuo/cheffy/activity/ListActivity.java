@@ -55,8 +55,6 @@ public class ListActivity extends Activity {
         autoEditSearch = (AutoCompleteTextView) findViewById(R.id.edit_auto_search);
         list = (RecyclerView) findViewById(R.id.list_recipes);
         database = new DatabaseHelper(this);
-        resizedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.food);
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
         list.setLayoutManager(new LinearLayoutManager(this));
         findViewById(R.id.button_database).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +63,16 @@ public class ListActivity extends Activity {
             }
         });
         recipeItems = new ArrayList<>();
+        findViewById(R.id.button_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getResultForSearch();
+            }
+        });
+
+        //Partea lui Sefu
+        resizedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.food);
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
         mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
@@ -77,6 +85,11 @@ public class ListActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshList();
+        setSearchSuggestions();
+    }
+
+    private void refreshList() {
         Cursor cursorItems = database.getRecipeAlphabetically();
         if (cursorItems.moveToFirst()) {
             do {
@@ -87,6 +100,9 @@ public class ListActivity extends Activity {
         cursorItems.close();
         recipeAdapter = new RecipeAdapter(this, recipeItems);
         list.setAdapter(recipeAdapter);
+    }
+
+    private void setSearchSuggestions() {
         ArrayList<String> recipesNames = new ArrayList<>();
         Cursor cursorRecipes = database.getRecipe();
         if (cursorRecipes.moveToFirst()) {
@@ -97,23 +113,21 @@ public class ListActivity extends Activity {
         cursorRecipes.close();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, recipesNames);
         autoEditSearch.setAdapter(adapter);
-        findViewById(R.id.button_search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!autoEditSearch.getText().toString().isEmpty()) {
-                    Cursor cursorSearch = database.getRecipeForName(autoEditSearch.getText().toString());
-                    if (cursorSearch.moveToFirst()) {
-                        recipeItems.clear();
-                        recipeItems.add(new RecipeItem(getBitmapForName(getApplicationContext(), cursorSearch.getString(CURSOR_PICTURE)), cursorSearch.getString(CURSOR_RECIPE)));
-                        recipeAdapter = new RecipeAdapter(getApplicationContext(), recipeItems);
-                        list.setAdapter(recipeAdapter);
-                    }
-                    cursorSearch.close();
-                } else {
-                    onResume();
-                }
+    }
+
+    private void getResultForSearch() {
+        if (!autoEditSearch.getText().toString().isEmpty()) {
+            Cursor cursorSearch = database.getRecipeForName(autoEditSearch.getText().toString());
+            if (cursorSearch.moveToFirst()) {
+                recipeItems.clear();
+                recipeItems.add(new RecipeItem(getBitmapForName(getApplicationContext(), cursorSearch.getString(CURSOR_PICTURE)), cursorSearch.getString(CURSOR_RECIPE)));
+                recipeAdapter = new RecipeAdapter(getApplicationContext(), recipeItems);
+                list.setAdapter(recipeAdapter);
             }
-        });
+            cursorSearch.close();
+        } else {
+            onResume();
+        }
     }
 
     private class RecipesHttpRequestTask extends AsyncTask<Void, Void, Recipe[]> {
