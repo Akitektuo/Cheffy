@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -45,6 +46,7 @@ public class ListActivity extends Activity {
     private RecyclerView list;
     private ArrayList<RecipeItem> recipeItems;
     private RecipeAdapter recipeAdapter;
+    private int counter;
     private AutoCompleteTextView autoEditSearch;
     private DatabaseHelper database;
 
@@ -81,7 +83,6 @@ public class ListActivity extends Activity {
             }
         });
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -131,6 +132,7 @@ public class ListActivity extends Activity {
     }
 
     private class RecipesHttpRequestTask extends AsyncTask<Void, Void, Recipe[]> {
+
         @Override
         protected Recipe[] doInBackground(Void... params) {
             Looper.prepare();
@@ -153,9 +155,12 @@ public class ListActivity extends Activity {
 
         @Override
         protected void onPostExecute(Recipe[] recipes) {
-            mPullToRefreshView.setRefreshing(false);//hide refresh
+            counter = recipes.length;
             if(recipes!=null) {
-                recipeItems.clear();
+                if(recipeItems!=null)
+                    recipeItems.clear();
+                else
+                    recipeItems = new ArrayList<>();
                 for (final Recipe r : recipes){
                     BasicImageDownloader downloader = new BasicImageDownloader(new BasicImageDownloader.OnImageLoaderListener() {
                         @Override
@@ -164,18 +169,20 @@ public class ListActivity extends Activity {
                         @Override
                         public void onProgressChange(int percent) {
                         }
+
                         @Override
                         public void onComplete(Bitmap result) {
                             resizedBitmap = result;
-                            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
                             recipeItems.add(new RecipeItem(resizedBitmap, r.getName()));
-                            recipeAdapter.notifyDataSetChanged();
+                            mPullToRefreshView.setRefreshing(false);
                         }
                     });
                     downloader.download("https://dummy-api-ioansiran.c9users.io/assets/"+r.getPicture(),false);
                 }
+                recipeAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(),"A network error occurred", Toast.LENGTH_LONG).show();
+
         }
 
     }
