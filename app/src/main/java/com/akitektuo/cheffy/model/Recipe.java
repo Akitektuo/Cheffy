@@ -1,8 +1,6 @@
 package com.akitektuo.cheffy.model;
 
-/**
- * Created by PC on 4/1/2017.
- */
+import java.util.Arrays;
 
 public class Recipe {
     private int id;
@@ -67,5 +65,18 @@ public class Recipe {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                ", duration=" + duration +
+                ", ingredients=" + Arrays.toString(ingredients) +
+                ", weights=" + Arrays.toString(weights) +
+                ", picture='" + picture + '\'' +
+                '}';
     }
 }

@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -20,7 +22,8 @@ import com.akitektuo.cheffy.adapter.RecipeAdapter;
 import com.akitektuo.cheffy.adapter.RecipeItem;
 import com.akitektuo.cheffy.database.DatabaseHelper;
 import com.akitektuo.cheffy.model.Recipe;
-import com.akitektuo.cheffy.util.BasicImageDownloader;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.yalantis.pulltomakesoup.PullToRefreshView;
 
 import org.springframework.http.HttpEntity;
@@ -31,21 +34,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import static android.content.ContentValues.TAG;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Tool.getBitmapForName;
 
 public class ListActivity extends Activity {
-
     private PullToRefreshView mPullToRefreshView;
-    private Bitmap resizedBitmap;//aici e o buba temporara
     private RecyclerView list;
     private ArrayList<RecipeItem> recipeItems;
     private RecipeAdapter recipeAdapter;
-    private int counter;
     private AutoCompleteTextView autoEditSearch;
     private DatabaseHelper database;
 
@@ -53,9 +59,13 @@ public class ListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        recipeItems = new ArrayList<>();
         autoEditSearch = (AutoCompleteTextView) findViewById(R.id.edit_auto_search);
         list = (RecyclerView) findViewById(R.id.list_recipes);
         database = new DatabaseHelper(this);
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+
         list.setLayoutManager(new LinearLayoutManager(this));
         findViewById(R.id.button_database).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,18 +73,12 @@ public class ListActivity extends Activity {
                 startActivity(new Intent(getApplicationContext(), DatabaseActivity.class));
             }
         });
-        recipeItems = new ArrayList<>();
         findViewById(R.id.button_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getResultForSearch();
             }
         });
-
-        //Partea lui Sefu
-        resizedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.food);
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
-        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
         mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -129,23 +133,29 @@ public class ListActivity extends Activity {
             onResume();
         }
     }
-
+    private void persist(Recipe recipe) {
+        /*
+        ***TO DO Persit "recipe
+         */
+    }
     private class RecipesHttpRequestTask extends AsyncTask<Void, Void, Recipe[]> {
 
         @Override
         protected Recipe[] doInBackground(Void... params) {
-            Looper.prepare();
-            try {
                 final String url = "https://dummy-api-ioansiran.c9users.io/recipes/all";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 HttpHeaders headers = new HttpHeaders();
                 HttpEntity<Object> entity = new HttpEntity<>(headers);
+            try {
                 ResponseEntity<Recipe[]> out = restTemplate.exchange(url, HttpMethod.GET, entity, Recipe[].class);
-                if(out.getStatusCode()== HttpStatus.OK){
-                    Recipe[] recipes = out.getBody();
-                    return recipes;
-                } else return null;
+                if (out.getStatusCode() == HttpStatus.OK)
+                    return out.getBody();
+                else{
+
+                    Toast.makeText(getApplicationContext(), "Code "+out.getStatusCode(), Toast.LENGTH_SHORT).show();
+                    return null;
+                }
             } catch (final Exception e) {
                 e.printStackTrace();
             }
@@ -155,36 +165,39 @@ public class ListActivity extends Activity {
         @Override
         protected void onPostExecute(Recipe[] recipes) {
             if(recipes!=null) {
-                if(recipeItems!=null)
-                    recipeItems.clear();
-                else
-                    recipeItems = new ArrayList<>();
-                for (final Recipe r : recipes){
-                    BasicImageDownloader downloader = new BasicImageDownloader(new BasicImageDownloader.OnImageLoaderListener() {
-                        @Override
-                        public void onError(BasicImageDownloader.ImageError error) {
-                        }
-                        @Override
-                        public void onProgressChange(int percent) {
-                        }
+                for (final Recipe recipe : recipes) {
+                    Log.d("Downloaded recipe",recipe.toString());
+                    persist(recipe);
+                    Picasso.with(getApplicationContext())
+                            .load("https://dummy-api-ioansiran.c9users.io/assets/"+recipe.getPicture())
+                            .into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    storeImage(bitmap,recipe.getPicture());
+                                }
 
-                        @Override
-                        public void onComplete(Bitmap result) {
-                            resizedBitmap = result;
-                            recipeItems.add(new RecipeItem(resizedBitmap, r.getName()));
-                            mPullToRefreshView.setRefreshing(false);
-                        }
-                    });
-                    downloader.download("https://dummy-api-ioansiran.c9users.io/assets/"+r.getPicture(),false);
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+                                    Toast.makeText(getApplicationContext(),"Failed to download image", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                }
+                            });
                 }
-                recipeAdapter.notifyDataSetChanged();
-            } else {
-                Toast.makeText(getApplicationContext(), "A network error occurred", Toast.LENGTH_LONG).show();
+                refreshList();
                 mPullToRefreshView.setRefreshing(false);
-
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "A network error occurred", Toast.LENGTH_SHORT).show();
+                mPullToRefreshView.setRefreshing(false);
             }
         }
-
     }
-
+    private void storeImage(Bitmap image,String name) {
+        /*
+        *** TO DO save file
+         */
+    }
 }
