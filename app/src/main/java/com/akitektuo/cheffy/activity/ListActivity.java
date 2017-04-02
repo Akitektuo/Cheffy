@@ -154,7 +154,6 @@ public class ListActivity extends Activity {
 
         @Override
         protected void onPostExecute(Recipe[] recipes) {
-            counter = recipes.length;
             if(recipes!=null) {
                 if(recipeItems!=null)
                     recipeItems.clear();
@@ -179,9 +178,11 @@ public class ListActivity extends Activity {
                     downloader.download("https://dummy-api-ioansiran.c9users.io/assets/"+r.getPicture(),false);
                 }
                 recipeAdapter.notifyDataSetChanged();
-            } else
-                Toast.makeText(getApplicationContext(),"A network error occurred", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "A network error occurred", Toast.LENGTH_LONG).show();
+                mPullToRefreshView.setRefreshing(false);
 
+            }
         }
 
     }
