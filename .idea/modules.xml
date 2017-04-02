@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Cheffy.iml" filepath="$PROJECT_DIR$/Cheffy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Evozon.iml" filepath="$PROJECT_DIR$/Evozon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

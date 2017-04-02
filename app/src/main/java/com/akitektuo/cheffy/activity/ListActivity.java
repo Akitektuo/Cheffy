@@ -7,8 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,20 +32,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-import static android.content.ContentValues.TAG;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Tool.getBitmapForName;
 
 public class ListActivity extends Activity {
+    private static final String HOST = "https://dummy-api-ioansiran.c9users.io";
     private PullToRefreshView mPullToRefreshView;
     private RecyclerView list;
     private ArrayList<RecipeItem> recipeItems;
@@ -85,6 +77,7 @@ public class ListActivity extends Activity {
                 new RecipesHttpRequestTask().execute();
             }
         });
+
     }
     @Override
     protected void onResume() {
@@ -134,28 +127,34 @@ public class ListActivity extends Activity {
         }
     }
     private void persist(Recipe recipe) {
+        Log.d("Persists", "Added recipe: " + recipe.getName() + " to database");
         /*
         ***TO DO Persit "recipe
          */
     }
+
+    private void storeImage(Bitmap image, String name) {
+        Log.d("Saves", "Saved image: " + name);
+        /*
+        *** TO DO save file
+         */
+    }
+
     private class RecipesHttpRequestTask extends AsyncTask<Void, Void, Recipe[]> {
 
         @Override
         protected Recipe[] doInBackground(Void... params) {
-                final String url = "https://dummy-api-ioansiran.c9users.io/recipes/all";
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                HttpHeaders headers = new HttpHeaders();
-                HttpEntity<Object> entity = new HttpEntity<>(headers);
+            final String url = HOST + "/recipes/all";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<Object> entity = new HttpEntity<>(headers);
             try {
                 ResponseEntity<Recipe[]> out = restTemplate.exchange(url, HttpMethod.GET, entity, Recipe[].class);
                 if (out.getStatusCode() == HttpStatus.OK)
                     return out.getBody();
-                else{
-
+                else
                     Toast.makeText(getApplicationContext(), "Code "+out.getStatusCode(), Toast.LENGTH_SHORT).show();
-                    return null;
-                }
             } catch (final Exception e) {
                 e.printStackTrace();
             }
@@ -165,39 +164,36 @@ public class ListActivity extends Activity {
         @Override
         protected void onPostExecute(Recipe[] recipes) {
             if(recipes!=null) {
+                Log.d("Result", "API returned " + recipes.length + " items");
                 for (final Recipe recipe : recipes) {
-                    Log.d("Downloaded recipe",recipe.toString());
                     persist(recipe);
+                    Target t = new Target() {
+                        @Override
+                        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                            storeImage(bitmap, recipe.getPicture());
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                            Toast.makeText(getApplicationContext(), "Failed to download image", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            Log.d("onPrepareLoad", "Preparing");
+                        }
+                    };
                     Picasso.with(getApplicationContext())
-                            .load("https://dummy-api-ioansiran.c9users.io/assets/"+recipe.getPicture())
-                            .into(new Target() {
-                                @Override
-                                public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    storeImage(bitmap,recipe.getPicture());
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    Toast.makeText(getApplicationContext(),"Failed to download image", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                }
-                            });
+                            .load(HOST + "/assets/" + recipe.getPicture())
+                            .into(t);
                 }
                 refreshList();
                 mPullToRefreshView.setRefreshing(false);
-            }
-            else {
+            } else {
                 Toast.makeText(getApplicationContext(), "A network error occurred", Toast.LENGTH_SHORT).show();
                 mPullToRefreshView.setRefreshing(false);
             }
         }
-    }
-    private void storeImage(Bitmap image,String name) {
-        /*
-        *** TO DO save file
-         */
     }
 }
