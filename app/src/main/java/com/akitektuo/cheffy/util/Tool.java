@@ -20,7 +20,7 @@ import java.util.Arrays;
 import static com.akitektuo.cheffy.util.Constant.LIST_SEPARATOR;
 
 /**
- * Created by AoD Akitektuo on 01-Apr-17 at 21:01.
+ * Created by Akitektuo on 01-Apr-17 at 21:01.
  */
 
 public class Tool {

@@ -1,5 +1,6 @@
 package com.akitektuo.cheffy.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -59,6 +61,9 @@ public class ListActivity extends Activity {
         database = new DatabaseHelper(this);
         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
 
+        ActivityCompat.requestPermissions(ListActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET}, 3);
+
         list.setLayoutManager(new LinearLayoutManager(this));
         findViewById(R.id.button_database).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +86,6 @@ public class ListActivity extends Activity {
 
         refreshList();
         setSearchSuggestions();
-
     }
     @Override
     protected void onResume() {
@@ -173,6 +177,7 @@ public class ListActivity extends Activity {
         protected void onPostExecute(Recipe[] recipes) {
             if(recipes!=null) {
                 Log.d("Result", "API returned " + recipes.length + " items");
+                database.deleteDatabase();
                 for (final Recipe recipe : recipes) {
                     persist(recipe);
                     Target t = new Target() {

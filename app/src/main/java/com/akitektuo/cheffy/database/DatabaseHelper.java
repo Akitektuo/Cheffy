@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.akitektuo.cheffy.util.Constant.CURSOR_ID;
+
 /**
  * Created by AoD Akitektuo on 01-Apr-17.
  */
@@ -94,6 +96,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selection = DatabaseContract.RecipeContractEntry.COLUMN_NAME + " LIKE ?";
         String[] selectionArgs = {name};
         return getReadableDatabase().query(DatabaseContract.RecipeContractEntry.TABLE_NAME, results, selection, selectionArgs, null, null, null);
+    }
+
+    public void deleteDatabase() {
+        Cursor cursor = getRecipe();
+        String selection;
+        String[] selectionArgs = new String[1];
+        if (cursor.moveToFirst()) {
+            do {
+                selection = DatabaseContract.RecipeContractEntry.COLUMN_ID + " LIKE ?";
+                selectionArgs[0] = String.valueOf(cursor.getInt(CURSOR_ID));
+                getWritableDatabase().delete(DatabaseContract.RecipeContractEntry.TABLE_NAME, selection, selectionArgs);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
     }
 
 }
