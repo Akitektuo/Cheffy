@@ -63,6 +63,7 @@ public class ListActivity extends Activity {
             @Override
             public void onClick(View view) {
                 refreshList();
+                autoEditSearch.setText("");
             }
         });
 
