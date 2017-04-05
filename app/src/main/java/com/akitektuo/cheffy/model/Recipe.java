@@ -1,14 +1,17 @@
 package com.akitektuo.cheffy.model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Recipe {
+
+    // Converted int duration into long for hours to fit
+    // String[] converted to ArrayList<String>
     private int id;
     private String name;
     private String content;
-    private int duration;
-    private String[] ingredients;
-    private String[] weights;
+    private long duration;
+    private ArrayList<String> ingredients;
+    private ArrayList<String> weights;
     private String picture;
 
     public int getId() {
@@ -35,27 +38,27 @@ public class Recipe {
         this.content = content;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public String[] getIngredients() {
+    public ArrayList<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String[] ingredients) {
+    public void setIngredients(ArrayList<String> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public String[] getWeights() {
+    public ArrayList<String> getWeights() {
         return weights;
     }
 
-    public void setWeights(String[] weights) {
+    public void setWeights(ArrayList<String> weights) {
         this.weights = weights;
     }
 
@@ -74,8 +77,8 @@ public class Recipe {
                 ", name='" + name + '\'' +
                 ", content='" + content + '\'' +
                 ", duration=" + duration +
-                ", ingredients=" + Arrays.toString(ingredients) +
-                ", weights=" + Arrays.toString(weights) +
+                ", ingredients=" + ingredients.toString() +
+                ", weights=" + weights.toString() +
                 ", picture='" + picture + '\'' +
                 '}';
     }
