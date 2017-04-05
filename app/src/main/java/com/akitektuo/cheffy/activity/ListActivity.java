@@ -59,6 +59,12 @@ public class ListActivity extends Activity {
         list = (RecyclerView) findViewById(R.id.list_recipes);
         database = new DatabaseHelper(this);
         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        findViewById(R.id.button_refresh_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshList();
+            }
+        });
 
         ActivityCompat.requestPermissions(ListActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET}, 3);
