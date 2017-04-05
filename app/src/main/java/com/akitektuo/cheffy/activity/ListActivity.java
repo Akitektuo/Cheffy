@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
+import static com.akitektuo.cheffy.util.Tool.convertListToString;
 import static com.akitektuo.cheffy.util.Tool.getBitmapForName;
 
 public class ListActivity extends Activity {
@@ -78,12 +79,15 @@ public class ListActivity extends Activity {
             }
         });
 
+        refreshList();
+        setSearchSuggestions();
+
     }
     @Override
     protected void onResume() {
         super.onResume();
-        refreshList();
-        setSearchSuggestions();
+//        refreshList();
+//        setSearchSuggestions();
     }
 
     private void refreshList() {
@@ -129,8 +133,11 @@ public class ListActivity extends Activity {
     private void persist(Recipe recipe) {
         Log.d("Persists", "Added recipe: " + recipe.getName() + " to database");
         /*
-        ***TO DO Persit "recipe
+        ***TO DO Persist "recipe
          */
+        database.addRecipe(recipe.getId(), recipe.getName(), recipe.getContent(),
+                convertListToString(recipe.getIngredients()), convertListToString(recipe.getWeights()),
+                recipe.getDuration(), recipe.getPicture());
     }
 
     private void storeImage(Bitmap image, String name) {
@@ -138,6 +145,7 @@ public class ListActivity extends Activity {
         /*
         *** TO DO save file
          */
+
     }
 
     private class RecipesHttpRequestTask extends AsyncTask<Void, Void, Recipe[]> {
