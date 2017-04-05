@@ -65,7 +65,7 @@ public class Tool {
         return resizedBitmap;
     }
 
-    private void saveToInternalStorage(Context context, Bitmap image, String name) {
+    public static void saveImage(Context context, Bitmap image, String name) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("image_food", Context.MODE_PRIVATE);
         File myPath = new File(directory, name + ".jpg");
@@ -85,7 +85,7 @@ public class Tool {
         }
     }
 
-    private Bitmap loadImageFromStorage(Context context, String name) {
+    public static Bitmap getImage(Context context, String name) {
         Bitmap bitmap = null;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("image_food", Context.MODE_PRIVATE);

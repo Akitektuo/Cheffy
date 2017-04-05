@@ -38,6 +38,7 @@ import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Tool.convertListToString;
 import static com.akitektuo.cheffy.util.Tool.getBitmapForName;
+import static com.akitektuo.cheffy.util.Tool.saveImage;
 
 public class ListActivity extends Activity {
     private static final String HOST = "https://dummy-api-ioansiran.c9users.io";
@@ -145,7 +146,7 @@ public class ListActivity extends Activity {
         /*
         *** TO DO save file
          */
-
+        saveImage(this, image, name);
     }
 
     private class RecipesHttpRequestTask extends AsyncTask<Void, Void, Recipe[]> {
