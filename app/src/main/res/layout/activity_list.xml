@@ -19,14 +19,14 @@
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:background="@drawable/data_config" />
-        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
-        <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
-        <AutoCompleteTextView
 
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <AutoCompleteTextView
             android:id="@+id/edit_auto_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
