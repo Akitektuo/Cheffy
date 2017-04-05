@@ -2,7 +2,6 @@ package com.akitektuo.cheffy.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -65,12 +64,6 @@ public class ListActivity extends Activity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET}, 3);
 
         list.setLayoutManager(new LinearLayoutManager(this));
-        findViewById(R.id.button_database).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), DatabaseActivity.class));
-            }
-        });
         findViewById(R.id.button_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
