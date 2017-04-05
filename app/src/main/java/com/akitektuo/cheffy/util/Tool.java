@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,7 +20,7 @@ import java.util.Arrays;
 import static com.akitektuo.cheffy.util.Constant.LIST_SEPARATOR;
 
 /**
- * Created by AoD Akitektuo on 01-Apr-17.
+ * Created by AoD Akitektuo on 01-Apr-17 at 21:01.
  */
 
 public class Tool {
@@ -57,12 +56,6 @@ public class Tool {
 
     public static ArrayList<String> convertStringToList(String str) {
         return new ArrayList<>(Arrays.asList(str.split(LIST_SEPARATOR)));
-    }
-
-    public static Bitmap getBitmapForName(Context context, String image) {
-        Bitmap resizedBitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources().getIdentifier(image, "drawable", context.getPackageName()));
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
-        return resizedBitmap;
     }
 
     public static void saveImage(Context context, Bitmap image, String name) {

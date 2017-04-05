@@ -16,6 +16,7 @@ import com.akitektuo.cheffy.activity.RecipeActivity;
 import java.util.List;
 
 import static com.akitektuo.cheffy.util.Constant.KEY_NAME;
+import static com.akitektuo.cheffy.util.Tool.getImage;
 
 /**
  * Created by AoD Akitektuo on 29-Mar-17.
@@ -43,7 +44,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     @Override
     public void onBindViewHolder(RecipeAdapter.ViewHolder viewHolder, int position) {
         final RecipeItem item = items.get(position);
-        viewHolder.image.setImageBitmap(item.getBitmap());
+        viewHolder.image.setImageBitmap(getImage(context, item.getImage()));
         viewHolder.text.setText(item.getName());
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

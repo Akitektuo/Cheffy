@@ -28,7 +28,7 @@ import static com.akitektuo.cheffy.util.Constant.CURSOR_QUANTITY;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Constant.KEY_NAME;
 import static com.akitektuo.cheffy.util.Tool.convertStringToList;
-import static com.akitektuo.cheffy.util.Tool.getBitmapForName;
+import static com.akitektuo.cheffy.util.Tool.getImage;
 import static com.akitektuo.cheffy.util.Tool.setListViewHeightBasedOnItems;
 
 public class RecipeActivity extends Activity {
@@ -76,7 +76,7 @@ public class RecipeActivity extends Activity {
                 ingredientItems.add(new IngredientItem(ingredients.get(i), quantities.get(i)));
             }
             textDuration.setText(convertMillisToTime(cursor.getLong(CURSOR_DURATION)));
-            imageFood.setImageBitmap(getBitmapForName(this, cursor.getString(CURSOR_PICTURE)));
+            imageFood.setImageBitmap(getImage(this, cursor.getString(CURSOR_PICTURE)));
             cursor.close();
         } else {
             for (int i = 0; i < 11; i++) {

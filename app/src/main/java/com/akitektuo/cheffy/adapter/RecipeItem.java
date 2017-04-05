@@ -1,30 +1,25 @@
 package com.akitektuo.cheffy.adapter;
 
-import android.graphics.Bitmap;
-
-import java.io.ByteArrayOutputStream;
-
 /**
  * Created by AoD Akitektuo on 29-Mar-17.
  */
 
 public class RecipeItem {
 
-    private Bitmap bitmap;
+    private String image;
     private String name;
 
-    public RecipeItem(Bitmap image, String recipeName) {
-        image.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
-        setBitmap(image);
+    public RecipeItem(String image, String recipeName) {
+        setImage(image);
         setName(recipeName);
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public String getImage() {
+        return image;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {

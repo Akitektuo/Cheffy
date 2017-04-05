@@ -36,12 +36,11 @@ import java.util.ArrayList;
 
 import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
+import static com.akitektuo.cheffy.util.Constant.HOST;
 import static com.akitektuo.cheffy.util.Tool.convertListToString;
-import static com.akitektuo.cheffy.util.Tool.getBitmapForName;
 import static com.akitektuo.cheffy.util.Tool.saveImage;
 
 public class ListActivity extends Activity {
-    private static final String HOST = "https://dummy-api-ioansiran.c9users.io";
     private PullToRefreshView mPullToRefreshView;
     private RecyclerView list;
     private ArrayList<RecipeItem> recipeItems;
@@ -96,7 +95,7 @@ public class ListActivity extends Activity {
         if (cursorItems.moveToFirst()) {
             recipeItems.clear();
             do {
-                recipeItems.add(new RecipeItem(getBitmapForName(this, cursorItems.getString(CURSOR_PICTURE)), cursorItems.getString(CURSOR_RECIPE)));
+                recipeItems.add(new RecipeItem(cursorItems.getString(CURSOR_PICTURE), cursorItems.getString(CURSOR_RECIPE)));
             } while (cursorItems.moveToNext());
         }
         cursorItems.close();
@@ -122,7 +121,7 @@ public class ListActivity extends Activity {
             Cursor cursorSearch = database.getRecipeForName(autoEditSearch.getText().toString());
             if (cursorSearch.moveToFirst()) {
                 recipeItems.clear();
-                recipeItems.add(new RecipeItem(getBitmapForName(getApplicationContext(), cursorSearch.getString(CURSOR_PICTURE)), cursorSearch.getString(CURSOR_RECIPE)));
+                recipeItems.add(new RecipeItem(cursorSearch.getString(CURSOR_PICTURE), cursorSearch.getString(CURSOR_RECIPE)));
                 recipeAdapter = new RecipeAdapter(getApplicationContext(), recipeItems);
                 list.setAdapter(recipeAdapter);
             }
