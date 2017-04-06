@@ -78,10 +78,51 @@ public class Tool {
         }
     }
 
+    public static void saveImage(Context context, Bitmap image, Bitmap imageHd, String name) {
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("image_food", Context.MODE_PRIVATE);
+        File path = new File(directory, name + ".jpg");
+        FileOutputStream fos = null;
+        ContextWrapper cwHd = new ContextWrapper(context);
+        File directoryHd = cwHd.getDir("image_food_hd", Context.MODE_PRIVATE);
+        File pathHd = new File(directoryHd, name + ".jpg");
+        FileOutputStream fosHd = null;
+        try {
+            fos = new FileOutputStream(path);
+            fosHd = new FileOutputStream(pathHd);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            imageHd.compress(Bitmap.CompressFormat.JPEG, 100, fosHd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                assert fos != null;
+                fos.close();
+                assert fosHd != null;
+                fosHd.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static Bitmap getImage(Context context, String name) {
         Bitmap bitmap = null;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("image_food", Context.MODE_PRIVATE);
+        try {
+            File f = new File(directory, name + ".jpg");
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public static Bitmap getImageHd(Context context, String name) {
+        Bitmap bitmap = null;
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("image_food_hd", Context.MODE_PRIVATE);
         try {
             File f = new File(directory, name + ".jpg");
             bitmap = BitmapFactory.decodeStream(new FileInputStream(f));
