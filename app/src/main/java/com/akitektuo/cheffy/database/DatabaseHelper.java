@@ -114,17 +114,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public Cursor getRecipeForIngredient(String ingredient) {
-        String[] results = {DatabaseContract.RecipeContractEntry.COLUMN_ID,
-                DatabaseContract.RecipeContractEntry.COLUMN_NAME,
-                DatabaseContract.RecipeContractEntry.COLUMN_DESCRIPTION,
-                DatabaseContract.RecipeContractEntry.COLUMN_INGREDIENT,
-                DatabaseContract.RecipeContractEntry.COLUMN_QUANTITY,
-                DatabaseContract.RecipeContractEntry.COLUMN_DURATION,
-                DatabaseContract.RecipeContractEntry.COLUMN_PICTURE};
-        String selection = DatabaseContract.RecipeContractEntry.COLUMN_NAME + " CONTAINS ?";
-        String[] selectionArgs = {ingredient};
-        return getReadableDatabase().query(DatabaseContract.RecipeContractEntry.TABLE_NAME, results, selection, selectionArgs, null, null, SORT_ALPHABETICALLY);
-    }
-
 }

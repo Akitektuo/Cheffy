@@ -35,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
+import static com.akitektuo.cheffy.util.Constant.CURSOR_INGREDIENT;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Constant.HOST;
@@ -92,6 +93,11 @@ public class ListActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         if (searchRequest) {
             searchList(keyIngredient);
             searchRequest = false;
@@ -112,11 +118,13 @@ public class ListActivity extends Activity {
     }
 
     private void searchList(String ingredient) {
-        Cursor cursorSearch = database.getRecipeForIngredient(ingredient);
+        Cursor cursorSearch = database.getRecipeAlphabetically();
         if (cursorSearch.moveToFirst()) {
             recipeItems.clear();
             do {
-                recipeItems.add(new RecipeItem(cursorSearch.getString(CURSOR_PICTURE), cursorSearch.getString(CURSOR_RECIPE)));
+                if (cursorSearch.getString(CURSOR_INGREDIENT).contains(ingredient)) {
+                    recipeItems.add(new RecipeItem(cursorSearch.getString(CURSOR_PICTURE), cursorSearch.getString(CURSOR_RECIPE)));
+                }
             } while (cursorSearch.moveToNext());
         }
         cursorSearch.close();

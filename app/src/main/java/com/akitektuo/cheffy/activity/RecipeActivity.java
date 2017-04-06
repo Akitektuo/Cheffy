@@ -69,7 +69,7 @@ public class RecipeActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 searchRequest = true;
-                keyIngredient = ingredientItems.get(i).toString();
+                keyIngredient = ingredientItems.get(i).getIngredient();
                 finish();
                 return true;
             }
