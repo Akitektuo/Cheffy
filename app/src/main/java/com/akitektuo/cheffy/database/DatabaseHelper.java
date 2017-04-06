@@ -27,6 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.RecipeContractEntry.COLUMN_DURATION + " INTEGER," +
             DatabaseContract.RecipeContractEntry.COLUMN_PICTURE + " TEXT" + ");";
 
+    private static final String SORT_ALPHABETICALLY = DatabaseContract.RecipeContractEntry.COLUMN_NAME + " COLLATE NOCASE ASC";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -73,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 DatabaseContract.RecipeContractEntry.COLUMN_DURATION,
                 DatabaseContract.RecipeContractEntry.COLUMN_PICTURE};
         return getReadableDatabase().query(DatabaseContract.RecipeContractEntry.TABLE_NAME, list,
-                null, null, null, null, DatabaseContract.RecipeContractEntry.COLUMN_NAME + " COLLATE NOCASE ASC");
+                null, null, null, null, SORT_ALPHABETICALLY);
     }
 
     public int getRecipeId() {
@@ -110,6 +112,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+    }
+
+    public Cursor getRecipeForIngredient(String ingredient) {
+        String[] results = {DatabaseContract.RecipeContractEntry.COLUMN_ID,
+                DatabaseContract.RecipeContractEntry.COLUMN_NAME,
+                DatabaseContract.RecipeContractEntry.COLUMN_DESCRIPTION,
+                DatabaseContract.RecipeContractEntry.COLUMN_INGREDIENT,
+                DatabaseContract.RecipeContractEntry.COLUMN_QUANTITY,
+                DatabaseContract.RecipeContractEntry.COLUMN_DURATION,
+                DatabaseContract.RecipeContractEntry.COLUMN_PICTURE};
+        String selection = DatabaseContract.RecipeContractEntry.COLUMN_NAME + " CONTAINS ?";
+        String[] selectionArgs = {ingredient};
+        return getReadableDatabase().query(DatabaseContract.RecipeContractEntry.TABLE_NAME, results, selection, selectionArgs, null, null, SORT_ALPHABETICALLY);
     }
 
 }

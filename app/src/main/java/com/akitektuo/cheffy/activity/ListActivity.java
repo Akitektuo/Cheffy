@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Constant.HOST;
+import static com.akitektuo.cheffy.util.Constant.keyIngredient;
+import static com.akitektuo.cheffy.util.Constant.searchRequest;
 import static com.akitektuo.cheffy.util.Tool.convertListToString;
 import static com.akitektuo.cheffy.util.Tool.saveImage;
 
@@ -90,8 +92,10 @@ public class ListActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-//        refreshList();
-//        setSearchSuggestions();
+        if (searchRequest) {
+            searchList(keyIngredient);
+            searchRequest = false;
+        }
     }
 
     private void refreshList() {
@@ -103,6 +107,19 @@ public class ListActivity extends Activity {
             } while (cursorItems.moveToNext());
         }
         cursorItems.close();
+        recipeAdapter = new RecipeAdapter(this, recipeItems);
+        list.setAdapter(recipeAdapter);
+    }
+
+    private void searchList(String ingredient) {
+        Cursor cursorSearch = database.getRecipeForIngredient(ingredient);
+        if (cursorSearch.moveToFirst()) {
+            recipeItems.clear();
+            do {
+                recipeItems.add(new RecipeItem(cursorSearch.getString(CURSOR_PICTURE), cursorSearch.getString(CURSOR_RECIPE)));
+            } while (cursorSearch.moveToNext());
+        }
+        cursorSearch.close();
         recipeAdapter = new RecipeAdapter(this, recipeItems);
         list.setAdapter(recipeAdapter);
     }

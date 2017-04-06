@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -27,6 +28,8 @@ import static com.akitektuo.cheffy.util.Constant.CURSOR_PICTURE;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_QUANTITY;
 import static com.akitektuo.cheffy.util.Constant.CURSOR_RECIPE;
 import static com.akitektuo.cheffy.util.Constant.KEY_NAME;
+import static com.akitektuo.cheffy.util.Constant.keyIngredient;
+import static com.akitektuo.cheffy.util.Constant.searchRequest;
 import static com.akitektuo.cheffy.util.Tool.convertStringToList;
 import static com.akitektuo.cheffy.util.Tool.getImage;
 import static com.akitektuo.cheffy.util.Tool.setListViewHeightBasedOnItems;
@@ -62,6 +65,15 @@ public class RecipeActivity extends Activity {
         textDuration = (TextView) findViewById(R.id.text_time);
         ingredientItems = new ArrayList<>();
         database = new DatabaseHelper(this);
+        listIngredients.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                searchRequest = true;
+                keyIngredient = ingredientItems.get(i).toString();
+                finish();
+                return true;
+            }
+        });
         setInformation();
     }
 

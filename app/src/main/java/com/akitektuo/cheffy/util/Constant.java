@@ -15,4 +15,6 @@ public class Constant {
     public static final int CURSOR_PICTURE = 6;
     public static final String HOST = "https://dummy-api-ioansiran.c9users.io";
     static final String LIST_SEPARATOR = "_;_";
+    public static boolean searchRequest;
+    public static String keyIngredient;
 }
