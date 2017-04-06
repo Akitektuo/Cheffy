@@ -77,7 +77,11 @@ public class ListActivity extends Activity {
         findViewById(R.id.button_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getResultForSearch();
+                if (autoEditSearch.getText().toString().isEmpty()) {
+                    refreshList();
+                } else {
+                    getResultForSearch();
+                }
             }
         });
         mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
@@ -99,6 +103,7 @@ public class ListActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
         if (searchRequest) {
+            autoEditSearch.setText(keyIngredient);
             searchList(keyIngredient);
             searchRequest = false;
         }
