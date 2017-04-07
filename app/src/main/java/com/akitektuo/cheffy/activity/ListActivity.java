@@ -166,9 +166,6 @@ public class ListActivity extends Activity {
     }
     private void persist(Recipe recipe) {
         Log.d("Persists", "Added recipe: " + recipe.getName() + " to database");
-        /*
-        ***TO DO Persist "recipe
-         */
         database.addRecipe(recipe.getId(), recipe.getName(), recipe.getContent(),
                 convertListToString(recipe.getIngredients()), convertListToString(recipe.getWeights()),
                 recipe.getDuration(), recipe.getPicture());
@@ -176,9 +173,8 @@ public class ListActivity extends Activity {
 
     private void storeImage(Bitmap image, String name) {
         Log.d("Saves", "Saved image: " + name);
-        /*
-        *** TO DO save file
-         */
+        // TODO: 07.04.2017 add as parameter bitmapHd
+//         saveImage(this, image, imageHd, name);
         saveImage(this, image, name);
     }
 
