@@ -173,7 +173,7 @@ public class ListActivity extends Activity {
 
     private void storeImage(Bitmap image, String name) {
         Log.d("Saves", "Saved image: " + name);
-        // TODO: 07.04.2017 add as parameter bitmapHd
+        // TODO: 07.04.2017 add as parameter imageHd
 //         saveImage(this, image, imageHd, name);
         saveImage(this, image, name);
     }
