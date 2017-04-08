@@ -6,6 +6,7 @@
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
     android:background="@drawable/corners_item"
+    android:elevation="4dp"
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -23,7 +24,7 @@
         android:layout_toStartOf="@+id/image_item_open"
         android:gravity="center"
         android:text="Test"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimary"
         android:textSize="28sp"
         android:textStyle="bold" />
 

@@ -3,12 +3,12 @@
 
     <!-- Optional, round your corners_top -->
     <corners
-        android:bottomLeftRadius="20dp"
-        android:bottomRightRadius="20dp"
-        android:topLeftRadius="20dp"
-        android:topRightRadius="20dp" />
+        android:bottomLeftRadius="2dp"
+        android:bottomRightRadius="2dp"
+        android:topLeftRadius="2dp"
+        android:topRightRadius="2dp" />
 
     <gradient
-        android:endColor="@color/colorPrimaryDark"
-        android:startColor="@color/colorPrimaryDark" />
+        android:endColor="#FAFAFA"
+        android:startColor="#FAFAFA" />
 </shape>
