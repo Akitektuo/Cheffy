@@ -164,6 +164,7 @@ public class ListActivity extends Activity {
             onResume();
         }
     }
+
     private void persist(Recipe recipe) {
         Log.d("Persists", "Added recipe: " + recipe.getName() + " to database");
         database.addRecipe(recipe.getId(), recipe.getName(), recipe.getContent(),
