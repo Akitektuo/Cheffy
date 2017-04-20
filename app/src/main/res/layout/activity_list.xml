@@ -48,6 +48,7 @@
             android:background="@drawable/search" />
 
     </RelativeLayout>
+
     <com.yalantis.pulltomakesoup.PullToRefreshView
         android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
@@ -61,5 +62,7 @@
             android:divider="@android:color/transparent"
             android:padding="16dp"
             android:scrollbars="none" />
+
     </com.yalantis.pulltomakesoup.PullToRefreshView>
+
 </LinearLayout>
